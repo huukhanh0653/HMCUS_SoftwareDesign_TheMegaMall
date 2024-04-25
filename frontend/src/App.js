@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 // --- Main Layout Imports ---
 import Main from "./layouts/Main/Main";
 // === Main's Page Imports ===
-import Home from "./pages/Main/Home/Home";
+import Home from "./pages/main/Home/Home";
 import Detail from "./pages/Main/Detail/Detail";
 import MultiCategory from "./pages/Main/MultiCategory/MultiCategory";
 import SingleCategory from "./pages/Main/SingleCategory/SingleCategory";
@@ -11,7 +11,7 @@ import Search from "./pages/Main/Search/Search";
 import ShopCart from "./pages/Main/ShopCart/ShopCart";
 import UserInfo from "./pages/Main/UserInfo/UserInfo";
 import History from "./pages/Main/History/History";
-import Error404 from "./pages/Main/Error404/Error404";
+import Error404 from "./pages/main/Error404/Error404";
 // --- Admin Layout Imports ---
 import Admin from "./layouts/Admin/Admin";
 // === Admin's Page Imports ===

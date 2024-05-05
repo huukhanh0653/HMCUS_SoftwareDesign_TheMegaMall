@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const slug = require('mongoose-slug-updater');
-mongoose.plugin(slug);
-
 const productSchema = new Schema({
     title: {
         type: String,
@@ -39,11 +36,6 @@ const productSchema = new Schema({
     price:{
         type: Number,
         required: [true, 'Product must have price']
-    },
-    slug: {
-        type: String,
-        slug: "title",
-        unique: true
     }
 })
 // The same create table in sql server and table have name which is lowercase."article" 

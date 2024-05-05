@@ -63,10 +63,12 @@ const Home = () => {
     const [loadPage, setLoadPage] = useState(false);
 
     useEffect(() => {
+
         if (prevFilterRef.current !== filter) {
             setLoadPage(true);
             prevFilterRef.current = filter;
         }
+
         if (prevPage.current !== currentPage) {
             window.scrollTo({
                 top: 1350,
@@ -74,7 +76,9 @@ const Home = () => {
             });
             prevPage.current = currentPage;
         }
+
         let fetchDomain = "";
+
         if (filter === "") {
             fetchDomain = `page=${currentPage}&limit=12`;
         } else if (filter === "Below $1000") {

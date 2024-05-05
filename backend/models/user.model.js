@@ -74,11 +74,6 @@ const userSchema = new Schema({
         type: Number,
         default: 0
     },
-    slug: { 
-        type: String, 
-        slug: "fullName", 
-        unique: true 
-    }
 }, { timestamps: true })
 
 const User = mongoose.model('Users', userSchema);

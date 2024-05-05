@@ -1,13 +1,16 @@
+const User = require('../models/user.model')
+const Product = require('../models/product.model');
+
 exports.sortObject = (obj) => {
-	let sorted = {};
-	let str = [];
-	let key;
-	for (key in obj){
-		if (obj.hasOwnProperty(key)) {
-		str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
+    let sorted = {};
+    let str = [];
+    let key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            str.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
     for (key = 0; key < str.length; key++) {
         sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
     }
@@ -32,15 +35,15 @@ exports.isDayEqual = (date1, date2) => {
 
 
 exports.getDate = (startDay, endDay) => {
-	const result = [];
-	let currentDay = new Date(startDay);
-  
-	while (currentDay <= endDay) {
-	  result.push(new Date(currentDay));
-	  currentDay.setDate(currentDay.getDate() + 1);
-	}
-  
-	return result;
+    const result = [];
+    let currentDay = new Date(startDay);
+
+    while (currentDay <= endDay) {
+        result.push(new Date(currentDay));
+        currentDay.setDate(currentDay.getDate() + 1);
+    }
+
+    return result;
 }
 
 exports.getWeeksInMonth = (year, month) => {
@@ -51,12 +54,12 @@ exports.getWeeksInMonth = (year, month) => {
 
     const daysInMonth = lastDayOfMonth.getUTCDate();
     const weeks = Math.ceil((daysInMonth + firstDayOfWeek) / 7);
-	
+
     return weeks;
 }
 
 exports.getStartOfWeek = (year, month, week) => {
-	const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
+    const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
     const daysUntilFirstSunday = (7 - firstDayOfMonth.getUTCDay()) % 7;
 
     const startOfWeek = new Date(firstDayOfMonth);
@@ -66,11 +69,104 @@ exports.getStartOfWeek = (year, month, week) => {
 }
 
 exports.getMonth = (year, monthIndex) => {
-	const firstDay = new Date(year, monthIndex, 1);
-	const lastDay = new Date(year, monthIndex + 1, 0);
-  
-	return {
-	  start: firstDay,
-	  end: lastDay
-	};
+    const firstDay = new Date(year, monthIndex, 1);
+    const lastDay = new Date(year, monthIndex + 1, 0);
+
+    return {
+        start: firstDay,
+        end: lastDay
+    };
+}
+
+exports.getFilterFromQuery = (filterString) => {
+    if (!filterString) return [];
+    const [minPrice, maxPrice] = filterString.split(',');
+    return [minPrice, maxPrice];
+}
+
+exports.applyFilter = (product, priceFilters) => {
+    let check = true;
+    if (priceFilters.length > 0) {
+        check = product.price >= priceFilters[0] && product.price <= priceFilters[1];
+    }
+    return product.category != null && check;
+}
+
+exports.paginationHandler = (page, limit, data) => {
+    const skip = (page - 1) * limit;
+
+    const paginatedResults = data.slice(skip, skip + limit * 1.0);
+
+    const totalPages = Math.ceil(data.length / limit);
+
+    return {
+        totalPages: totalPages,
+        paginatedResults: paginatedResults
+    }
+}
+
+exports.getUser = async (userId) => {
+    const user = await User.findById(userId)
+    if (!user) {
+        return res.status(404).json({
+            status: "fail",
+            data: "Cannot find this user"
+        });
+    }
+    return user;
+}
+
+exports.getProduct = async (product_id) => {
+    const product = await Product.findById(product_id)
+        if (!product) {
+            return res.status(200).json({
+                status: "fail",
+                data: "Product does not exist"
+            });
+        }
+}
+
+exports.checkExistProduct = async (user, product_id) => {
+    const existingProduct = user.Cart.find(item => item.product_id == product_id);
+    return existingProduct;
+}
+
+exports.countTotalPriceAndCartData = async (user) => {
+    const cartData = []
+    const totalPrice = await user.Cart.reduce(async (totalPromise, cartItem) => {
+        const total = await totalPromise;
+
+        try {
+            const product = await Product.findById(cartItem.product_id).populate({
+                path: 'category',
+                select: 'name'
+            });
+            const quantity = cartItem.quantity;
+            cartData.push({ product, quantity });
+            if (product) {
+                return product ? total + cartItem.quantity * product.price : total;
+            }
+        } catch (error) {
+            return total;
+        }
+    }, Promise.resolve(0));
+    return { cartData, totalPrice };
+}
+
+exports.updateCartQuantity = (user, product, quantity) => {
+    const existingProduct = user.Cart.find(item => item.product_id == product._id);
+
+    if (existingProduct) {
+        existingProduct.quantity += quantity;
+    } else {
+        user.Cart.push({ product_id: product._id, quantity });
+    }
+}
+
+exports.handleError = (err, res) => {
+    console.error(err);
+    res.status(500).json({
+        status: "fail",
+        data: err.message,
+    });
 }

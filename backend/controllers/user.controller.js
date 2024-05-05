@@ -1,22 +1,16 @@
-const User = require('../models/user.model');
+const fs = require('fs').promises;
+const User = require('../models/user.model')
+const bcrypt = require('bcrypt');
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
-const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const { paginationHandler } = require('../helper/index');
 
-// [GET] /api/v1/user/
-exports.getAllUsers = async (req, res) => {
+exports.getInfo = async (req, res) => {
     try {
-        //   const query = req.query;
-        const alldata = await User.find()
-        //   const resultPagination = paginationHandler(query.page, query.limit, alldata); // Use helper function
-        //   res.status(201).json({
-        //       status: 'success',
-        //       totalPage: resultPagination.totalPages,
-        //       data: resultPagination.paginatedResults
-        //   })
         res.status(201).json({
             status: 'success',
-            data: alldata
+            data: req.user
         })
     } catch (err) {
         res.status(400).json({
@@ -26,7 +20,24 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
-// [POST] /api/v1/user/create/createAll
+exports.getAllUsers = async (req, res) => {
+    try {
+        const query = req.query;
+        const alldata = await User.find()
+        const resultPagination = paginationHandler(query.page, query.limit, alldata); // Use helper function
+        res.status(201).json({
+            status: 'success',
+            totalPage: resultPagination.totalPages,
+            data: resultPagination.paginatedResults
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            msg: err
+        })
+    }
+}
+
 exports.createAllUser = async (req, res) => {
     try {
 
@@ -76,12 +87,9 @@ exports.createAllUser = async (req, res) => {
 
 }
 
-// [POST] /api/v1/user/create/newUser
 exports.createUser = async (req, res) => {
     try {
         const user = req.body;
-
-        console.log(req.body)
 
         const isTaken = await User.findOne({
             "userName": user.userName
@@ -93,7 +101,7 @@ exports.createUser = async (req, res) => {
             });
         }
 
-        bcrypt.hash(user.password, 10, async function (err, hash) {
+        bcrypt.hash(user.Password, 10, async function (err, hash) {
             if (err) {
                 retur(err);
             }
@@ -109,7 +117,6 @@ exports.createUser = async (req, res) => {
             status: 'success'
         })
     } catch (err) {
-        console.log(err)
         res.status(400).json({
             status: "fail",
             msg: err
@@ -118,7 +125,101 @@ exports.createUser = async (req, res) => {
 
 }
 
-//  [GET] /api/v1/user/search/product
+exports.getUser = async (req, res) => {
+    try {
+
+        const _id = req.params.id;
+
+        // Find the user by ID 
+        const finduser = await User.findById(_id);
+
+        if (!finduser) {
+            // If the user with the specified ID is not found, return an error response
+            return res.status(404).json({
+                status: 'fail',
+                msg: 'User not found.',
+            });
+        }
+
+
+        res.status(201).json({
+            status: 'success',
+            data: finduser
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            msg: err
+        })
+    }
+}
+
+exports.updateUser = async (req, res) => {
+    try {
+
+        const id = req.params.id;
+        const newUser = req.body
+        if (req.files) {
+            const file = req.files.image;
+            const result = await cloudinary.uploader.upload(file.tempFilePath, {
+                public_id: `${Date.now()}`,
+                resource_type: "auto",
+                folder: "images"
+            })
+            newUser.image_Avatar = result.url
+        }
+        const update = await User.findByIdAndUpdate(id, newUser, {
+            new: true
+        });
+
+        if (!update) {
+            return res.status(404).json({
+                status: 'fail',
+                msg: 'Update fail.',
+            });
+        }
+
+        res.status(201).json({
+            status: 'success',
+            data: update
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            msg: err
+        })
+    };
+}
+
+exports.deleteUser = async (req, res) => {
+    try {
+
+        const _id = req.params.id;
+
+        // Find the user by ID and delete it
+        const deletedUser = await User.deleteOne({ _id });
+        // const deletedUser = await User.deleteMany();
+
+        if (!deletedUser) {
+            // If the user with the specified ID is not found, return an error response
+            return res.status(404).json({
+                status: 'fail',
+                msg: 'User not found.',
+            });
+        }
+
+
+        res.status(201).json({
+            status: 'success',
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            msg: err
+        })
+    }
+}
+
 exports.searchProduct = async (req, res) => {
     try {
         const { page, limit, search, filter, filtercategory } = req.query;
@@ -129,9 +230,9 @@ exports.searchProduct = async (req, res) => {
 
         let queryBuilder = Product.find()
             .populate({
-                path: 'category',
-                select: 'name'
-            })
+            path: 'category',
+            select: 'name'
+        })
 
         if (req.query.sort) {
             const sortBy = req.query.sort.split(',').join(' ');
@@ -141,7 +242,7 @@ exports.searchProduct = async (req, res) => {
 
         const categories = await Category.find();
 
-
+       
         const normalize = (text) => (text ? text.replace(/\s/g, '').toLowerCase() : '');
 
         const searchResult = products.filter(product => {
@@ -163,7 +264,7 @@ exports.searchProduct = async (req, res) => {
             let check = true;
             if (filter) {
                 check = false
-                if (product.price >= arrayfilter[0] && product.price <= arrayfilter[1]) {
+                if (product.price >= arrayfilter[0] && product.price <= arrayfilter[1]){
                     check = true
                 }
             }
@@ -199,114 +300,3 @@ exports.searchProduct = async (req, res) => {
         });
     }
 };
-
-//  [GET] /api/v1/user/information/user
-exports.getInfo = async (req, res) => {
-    try {
-        res.status(201).json({
-            status: 'success',
-            data: req.user
-        })
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            msg: err
-        })
-    }
-}
-
-//  [GET] /api/v1/user/:slug
-exports.getUser = async (req, res) => {
-    try {
-        const slug = req.params.slug;
-
-        // Find the user by ID 
-        const finduser = await User.findOne({ slug: slug })
-
-        if (!finduser) {
-            // If the user with the specified ID is not found, return an error response
-            return res.status(404).json({
-                status: 'fail',
-                msg: 'User not found.',
-            });
-        }
-
-
-        res.status(201).json({
-            status: 'success',
-            data: finduser
-        })
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            msg: err
-        })
-    }
-}
-
-//  [PATCH] /api/v1/user/:id
-exports.updateUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const newUser = req.body
-        if (req.files) {
-            const file = req.files.image;
-            const result = await cloudinary.uploader.upload(file.tempFilePath, {
-                public_id: `${Date.now()}`,
-                resource_type: "auto",
-                folder: "images"
-            })
-            newUser.Image_Avatar = result.url
-        }
-        const update = await User.findByIdAndUpdate(id, newUser, {
-            new: true
-        });
-
-        if (!update) {
-            return res.status(404).json({
-                status: 'fail',
-                msg: 'Update fail.',
-            });
-        }
-
-        res.status(201).json({
-            status: 'success',
-            data: update
-        })
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            msg: err
-        })
-    };
-}
-
-//  [DELETE] /api/v1/user/:id
-exports.deleteUser = async (req, res) => {
-    try {
-
-        const _id = req.params.id;
-
-        // Find the user by ID and delete it
-        const deletedUser = await User.deleteOne({ _id });
-        // const deletedUser = await User.deleteMany();
-
-        if (!deletedUser) {
-            // If the user with the specified ID is not found, return an error response
-            return res.status(404).json({
-                status: 'fail',
-                msg: 'User not found.',
-            });
-        }
-
-
-        res.status(201).json({
-            status: 'success',
-        })
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            msg: err
-        })
-    }
-}

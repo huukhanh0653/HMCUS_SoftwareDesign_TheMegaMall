@@ -38,7 +38,7 @@ const userSchema = new Schema({
     address: {
         type: String
     },
-    image_Avatar: {
+    imageAvatar: {
         type: String,
         default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBXqRKXezHfKsAvXX2HOz0QO_5dvdAj5s0Bg&usqp=CAU"
     },

@@ -16,14 +16,6 @@ const certificate = fs.readFileSync('./openssl/cert.pem', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 const https = require('https');
 
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-    cloud_name: 'dupsdtrvy',
-    api_key: '943628789833962',
-    api_secret: 'xsn2ONslaeDRYZS3ojFuxG74fA0'
-});
-
 app.use(fileUpload({
     useTempFiles : true,
     limits: {fileSize: 50 * 2024 * 1024}

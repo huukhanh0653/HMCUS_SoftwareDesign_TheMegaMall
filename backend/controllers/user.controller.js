@@ -3,7 +3,7 @@ const User = require('../models/user.model')
 const bcrypt = require('bcrypt');
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('../config/cloudinaryConfig')
 const { paginationHandler } = require('../helper/index');
 
 exports.getInfo = async (req, res) => {
@@ -164,7 +164,7 @@ exports.updateUser = async (req, res) => {
             const result = await cloudinary.uploader.upload(file.tempFilePath, {
                 public_id: `${Date.now()}`,
                 resource_type: "auto",
-                folder: "images"
+                folder: "TheMegaMall"
             })
             newUser.image_Avatar = result.url
         }

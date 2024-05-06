@@ -47,18 +47,18 @@ exports.successLocal = (req, res) => {
 exports.signup = async (req, res) => {
     try {
         const {
-            UserName,
-            Password,
-            ConfirmPassword
+            userName,
+            password,
+            confirmpassword
         } = req.body;
-        if (!UserName || !Password || !ConfirmPassword) {
+        if (!userName || !password || !confirmpassword) {
             return res.status(400).json({
                 status: "fail",
                 msg: "Please fill all the information",
             });
         }
         const isTaken = await User.findOne({
-            "UserName": UserName
+            "userName": userName
         });
         if (isTaken) {
             return res.status(400).json({
@@ -67,34 +67,34 @@ exports.signup = async (req, res) => {
             });
         }
 
-        if (Password != ConfirmPassword) {
+        if (password != confirmpassword) {
             return res.status(400).json({
                 status: "fail",
                 msg: "Confirm password and password don't match",
             });
         }
 
-        if (Password.length < 6) {
+        if (password.length < 6) {
             return res.status(400).json({
                 status: "fail",
-                msg: "Password must be at least 6 characters long",
+                msg: "password must be at least 6 characters long",
             });
         }
 
         const NewBody = {
-            UserName: UserName,
-            Password: Password,
+            userName: userName,
+            password: password,
         }
-        const fullname = NewBody.UserName.split("@")[0]
+        const fullName = NewBody.userName.split("@")[0]
         const saltRounds = 10
-        bcrypt.hash(NewBody.Password, saltRounds, async function (err, hash) {
+        bcrypt.hash(NewBody.password, saltRounds, async function (err, hash) {
             if (err) {
                 return next(err);
             }
             const newUser = await User.create({
-                UserName: NewBody.UserName,
-                FullName: fullname,
-                Password: hash
+                userName: NewBody.userName,
+                fullName: fullName,
+                password: hash
             });
             
             const options = {

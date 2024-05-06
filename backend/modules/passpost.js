@@ -2,19 +2,16 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const Payment = require('../models/payment.model')
 const dotenv = require('dotenv')
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
-dotenv.config({
-    path: path.join(__dirname, '..', 'config.env')
-});
+dotenv.config();
 
 module.exports = passport => {
     passport.serializeUser((user, done) => {
         done(null, {
-            name: user.UserName,
+            name: user.userName,
             type: user.type
         })
     })
@@ -23,7 +20,7 @@ module.exports = passport => {
         try {
             console.log(user);
             if (user.type === 'local') {
-                const userLogin = await User.findOne({ UserName: user.name });
+                const userLogin = await User.findOne({ userName: user.name });
                 if (userLogin) {
                     return done(null, userLogin);
                 }
@@ -41,25 +38,25 @@ module.exports = passport => {
     });    
 
 
-    // username and password get from body
-    passport.use(new LocalStrategy(async (username, Password, done) => {
-        console.log("Username : ", username);
-        console.log("Password : ", Password);
+    // userName and password get from body
+    passport.use(new LocalStrategy(async (userName, password, done) => {
+        console.log("userName : ", userName);
+        console.log("password : ", password);
         try {
             const user = await User.findOne({
-                UserName: username.trim()
+                userName: userName.trim()
             });
             if (!user) {
                 return done(null, false, {
-                    message: 'Invalid username or password'
+                    message: 'Invalid userName or password'
                 }) 
             }
-            const isPasswordValid = await bcrypt.compare(Password, user.Password);
-            if (isPasswordValid) {
+            const ispasswordValid = await bcrypt.compare(password, user.password);
+            if (ispasswordValid) {
                 return done(null, user);
             }
             return done(null, false, {
-                message: 'Invalid username or password'
+                message: 'Invalid userName or password'
             });
         } catch (err) {
             return done(err)
@@ -80,9 +77,9 @@ module.exports = passport => {
             }
 
             const newUser = new User({
-                FullName: profile.displayName,
+                fullName: profile.displayName,
                 type: profile.id,
-                Image_Avatar: profile.photos[0].value
+                imageAvatar: profile.photos[0].value
             });
 
             const create = await User.create(newUser);

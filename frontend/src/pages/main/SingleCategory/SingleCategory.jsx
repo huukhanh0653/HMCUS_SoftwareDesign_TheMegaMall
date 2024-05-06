@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilterCircleDollar, faTag } from "@fortawesome/free-solid-svg-icons";
 import categoryImg from "../../../assets/category_bg.jpeg";
 // Components
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import ProductShelf from "../../../components/ProductShelf/ProductShelf";
-import Pagination from "../../../components/Pagination/Pagination";
-import Loader from "../../../components/Loader/Loader";
-import Filter from "../../../components/Filter/Filter";
+import Breadcrumbs from "../../../../public/components/Breadcrumbs/Breadcrumbs";
+import ProductShelf from "../../../../public/components/ProductShelf/ProductShelf";
+import Pagination from "../../../../public/components/Pagination/Pagination";
+import Loader from "../../../../public/components/Loader/Loader";
+import Filter from "../../../../public/components/Filter/Filter";
 // Style
-import "./single-category.css";
+import "./SingleCategory.css";
 // Implementation
 const SingleCategory = () => {
   const domain = "http://localhost:8000/api/v1/category/page?limit=8&";

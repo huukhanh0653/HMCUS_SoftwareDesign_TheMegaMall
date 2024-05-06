@@ -21,7 +21,7 @@ exports.isLoggedUser = (req, res, next) => {
             })
         }
 
-        if (req.user.Role == 'user') {
+        if (req.user.role == 'user') {
             jwt.verify(token, process.env.KEY_TOKEN, async (err, data) => {
                 if (err) {
                     console.error('JWT Verification Failed:', err.message);
@@ -61,7 +61,7 @@ exports.isLoggedAdmin = (req, res, next) => {
             })
         }
 
-        if (req.user.Role == 'admin') {
+        if (req.user.role == 'admin') {
             jwt.verify(token, process.env.KEY_TOKEN, async (err, data) => {
                 if (err) {
                     console.error('JWT Verification Failed:', err.message);

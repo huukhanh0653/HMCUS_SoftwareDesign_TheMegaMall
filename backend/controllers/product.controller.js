@@ -1,6 +1,6 @@
 const Product = require('../models/product.model')
 const User = require('../models/user.model')
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('../config/cloudinaryConfig')
 const fs = require('fs');
 const Category = require('../models/category.model')
 const { getFilterFromQuery, applyFilter, paginationHandler } = require('../helper/index');
@@ -79,7 +79,7 @@ exports.createProduct = async (req, res) => {
         const result = await cloudinary.uploader.upload(file.tempFilePath, {
             public_id: `${Date.now()}`,
             resource_type: "auto",
-            folder: "images"
+            folder: "TheMegaMall"
         })
         const foundCategory = await Category.findOne({ name: category })
         const product = {
@@ -141,7 +141,7 @@ exports.updateProduct = async (req, res) => {
             const result = await cloudinary.uploader.upload(file.tempFilePath, {
                 public_id: `${Date.now()}`,
                 resource_type: "auto",
-                folder: "images"
+                folder: "TheMegaMall"
             })
             newProduct.image = result.url
         }

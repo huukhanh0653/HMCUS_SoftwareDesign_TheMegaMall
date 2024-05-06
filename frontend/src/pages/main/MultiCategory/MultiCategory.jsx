@@ -4,11 +4,11 @@ import {Link, useOutletContext} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight, faTag} from "@fortawesome/free-solid-svg-icons";
 // Components
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import ProductShelf from "../../../components/ProductShelf/ProductShelf";
-import Loader from "../../../components/Loader/Loader";
+import Breadcrumbs from "../../../../public/components/Breadcrumbs/Breadcrumbs";
+import ProductShelf from "../../../../public/components/ProductShelf/ProductShelf";
+import Loader from "../../../../public/components/Loader/Loader";
 // Styles
-import "./multi-category.css";
+import "./MultiCategory.css";
 
 const MultiCategory = () => {
     const {categoryList} = useOutletContext();

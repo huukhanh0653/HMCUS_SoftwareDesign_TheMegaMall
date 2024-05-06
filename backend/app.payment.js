@@ -6,17 +6,16 @@ const fileUpload = require('express-fileupload')
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const p = require('./modules/passpost.js')
+const fs = require('fs');
 
-//routes
-const productRouter = require('./routes/product.router.js')
-const userRouter = require('./routes/user.router.js')
-const authentication = require('./routes/authentication.router.js')
-const categoryRouter = require('./routes/category.router.js')
-// const vnpayRouter = require('./routes/vnpay.router.js');
-const statisticRouter = require('./routes/statistic.router.js');
-// const mypayment = require('./routes/mypayment.router.js');
-const cartRouter = require('./routes/cart.router.js')
+const vnpayRouter = require('./routes/vnpay.router.js');
+const mypayment = require('./routes/handle.payment.router.js');
 const passport = require('passport')
+
+const privateKey = fs.readFileSync('./openssl/key.pem', 'utf8');
+const certificate = fs.readFileSync('./openssl/cert.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+const https = require('https');
 
 app.use(fileUpload({
     useTempFiles : true,
@@ -34,7 +33,7 @@ app.use(session({
 }))
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:8000',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }))
@@ -48,13 +47,8 @@ app.use(passport.session());
 // handle
 p(passport)
 
-app.use('/api/v1/product', productRouter);
-app.use('/api/v1/user', authentication);
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/category', categoryRouter);
-app.use('/api/v1/cart', cartRouter);
-// app.use('/api/v1/payment', mypayment);
-// app.use('/api/v1/vnpay', vnpayRouter);
-app.use('/api/v1/statistic', statisticRouter);
+app.use('/api/v1/payment', mypayment);
+app.use('/api/v1/vnpay', vnpayRouter);
 
-module.exports = app;
+const httpsServer = https.createServer(credentials, app);   
+module.exports = httpsServer;

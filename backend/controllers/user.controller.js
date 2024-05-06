@@ -46,32 +46,32 @@ exports.createAllUser = async (req, res) => {
 
         //=================================================================================
         for (const user of users) {
-            const { UserName } = user;
+            const { userName } = user;
 
             try {
-                // Check if username is taken
-                const isTaken = await User.findOne({ UserName });
+                // Check if userName is taken
+                const isTaken = await User.findOne({ userName });
 
-                // If username is taken, log a message and continue to th iteration
+                // If userName is taken, log a message and continue to th iteration
                 if (isTaken) {
-                    console.log(`Username '${UserName}' is already taken. Skipping user creation.`);
+                    console.log(`userName '${userName}' is already taken. Skipping user creation.`);
                     continue;
                 }
                 const saltRounds = 10
-                // If username is not taken, create the user
-                bcrypt.hash(user.Password, saltRounds, async function (err, hash) {
+                // If userName is not taken, create the user
+                bcrypt.hash(user.password, saltRounds, async function (err, hash) {
                     if (err) {
                         retur(err);
                     }
                     await User.create({
-                        UserName: UserName,
-                        Password: hash
+                        userName: userName,
+                        password: hash
                     });
                 })
 
             } catch (error) {
                 // Handle any other errors that might occur during user creation
-                console.error(`Error creating user with username '${UserName}':`, error);
+                console.error(`Error creating user with userName '${userName}':`, error);
             }
         }
 
@@ -101,7 +101,7 @@ exports.createUser = async (req, res) => {
             });
         }
 
-        bcrypt.hash(user.Password, 10, async function (err, hash) {
+        bcrypt.hash(user.password, 10, async function (err, hash) {
             if (err) {
                 retur(err);
             }
@@ -166,7 +166,7 @@ exports.updateUser = async (req, res) => {
                 resource_type: "auto",
                 folder: "TheMegaMall"
             })
-            newUser.image_Avatar = result.url
+            newUser.imageAvatar = result.url
         }
         const update = await User.findByIdAndUpdate(id, newUser, {
             new: true

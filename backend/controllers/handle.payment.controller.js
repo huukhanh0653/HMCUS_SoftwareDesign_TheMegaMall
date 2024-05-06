@@ -184,7 +184,7 @@ exports.getHistory = async (req, res) => {
                     },
                     {
                         path: 'idUser',
-                        select: 'FullName Image_Avatar'
+                        select: 'fullName imageAvatar'
                     }
                 ]
 

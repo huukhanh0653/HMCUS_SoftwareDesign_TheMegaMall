@@ -1,17 +1,15 @@
 const mongoose = require('mongoose')
-var slug = require('mongoose-slug-updater');
-mongoose.plugin(slug)
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     userName: {
         type: String,
-        require: [true, 'A User must have a UserName']
+        require: [true, 'A User must have a userName']
     },
     password: {
         type: String,
-        require: [true, 'A User must have a Password']
+        require: [true, 'A User must have a password']
     },
     role: {
         type: String,
@@ -38,7 +36,7 @@ const userSchema = new Schema({
     address: {
         type: String
     },
-    image_Avatar: {
+    imageAvatar: {
         type: String,
         default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBXqRKXezHfKsAvXX2HOz0QO_5dvdAj5s0Bg&usqp=CAU"
     },

@@ -14,7 +14,7 @@ exports.create = async (req, res) => {
     try {
         const id = req.body.id;
         try {
-            const newPayment = await Payment.create({balance: 100000});
+            const newPayment = await Payment.create({ balance: 100000 });
             const update = await User.findByIdAndUpdate(id, {
                 AccountPayment: newPayment._id,
             }, {
@@ -42,6 +42,10 @@ exports.payMoney = async (req, res) => {
             phone,
             address
         } = req.body;
+
+        console.log(token,
+            phone,
+            address)
 
         jwt.verify(token, process.env.KEY_TOKEN_PAYMENT, async (err, data) => {
             if (err) {
@@ -175,17 +179,17 @@ exports.getHistory = async (req, res) => {
             .populate({
                 path: 'Transaction',
                 populate: [{
-                        path: 'cart_id',
-                        select: 'product_id quantity',
-                        populate: {
-                            path: 'product_id',
-                            select: 'title image price'
-                        }
-                    },
-                    {
-                        path: 'idUser',
-                        select: 'FullName Image_Avatar'
+                    path: 'cart_id',
+                    select: 'product_id quantity',
+                    populate: {
+                        path: 'product_id',
+                        select: 'title image price'
                     }
+                },
+                {
+                    path: 'idUser',
+                    select: 'FullName Image_Avatar'
+                }
                 ]
 
             })

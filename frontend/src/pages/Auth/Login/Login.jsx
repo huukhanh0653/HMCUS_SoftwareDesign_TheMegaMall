@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Toastify from "./Toastify.jsx";
 
-import "./login.css";
+import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();

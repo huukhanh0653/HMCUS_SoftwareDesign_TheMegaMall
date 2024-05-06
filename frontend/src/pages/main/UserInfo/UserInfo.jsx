@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import "./user-info.css";
+import "./UserInfo.css";
 import { useOutletContext, useNavigate } from "react-router-dom";
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import Toastify from "../../../components/Toastify/Toastify";
-import Loader from "../../../components/Loader/Loader";
+import Breadcrumbs from "../../../../public/components/Breadcrumbs/Breadcrumbs";
+import Toastify from "../../../../public/components/Toastify/Toastify";
+import Loader from "../../../../public/components/Loader/Loader";
 import { format } from "date-fns";
 
 const UserInfo = () => {

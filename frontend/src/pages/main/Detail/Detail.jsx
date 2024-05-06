@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // Assets
 import { faChevronRight, faTag } from "@fortawesome/free-solid-svg-icons";
 // Components
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import ProductFrame from "../../../components/ProductFrame/ProductFrame";
-import ProductShelf from "../../../components/ProductShelf/ProductShelf";
+import Breadcrumbs from "../../../../public/components/Breadcrumbs/Breadcrumbs";
+import ProductFrame from "../../../../public/components/ProductFrame/ProductFrame";
+import ProductShelf from "../../../../public/components/ProductShelf/ProductShelf";
 // Style
-import "./detail.css";
+import "./Detail.css";
 // Implementation
 const Detail = () => {
   const { id } = useParams();

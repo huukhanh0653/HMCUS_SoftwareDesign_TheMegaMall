@@ -3,15 +3,15 @@ import { Route, Routes } from "react-router-dom";
 // --- Main Layout Imports ---
 import Main from "./layouts/Main/Main";
 // === Main's Page Imports ===
-import Home from "./pages/main/Home/Home";
-import Detail from "./pages/Main/Detail/Detail";
+import Home from "./pages/main/Home/Home.jsx";
+import Detail from "./pages/main/Detail/Detail.jsx";
 import MultiCategory from "./pages/Main/MultiCategory/MultiCategory";
-import SingleCategory from "./pages/Main/SingleCategory/SingleCategory";
-import Search from "./pages/Main/Search/Search";
+import SingleCategory from "./pages/main/SingleCategory/SingleCategory.jsx";
+import Search from "./pages/main/Search/Search.jsx";
 import ShopCart from "./pages/Main/ShopCart/ShopCart";
 import UserInfo from "./pages/Main/UserInfo/UserInfo";
-import History from "./pages/Main/History/History";
-import Error404 from "./pages/main/Error404/Error404";
+import History from "./pages/main/History/History.jsx";
+import Error404 from "./pages/main/Error404/Error404.jsx";
 // --- Admin Layout Imports ---
 import Admin from "./layouts/Admin/Admin";
 // === Admin's Page Imports ===
@@ -22,13 +22,15 @@ import AdminUpload from "./pages/Admin/AdminUpload/AdminUpload";
 import AdminProducts from "./pages/Admin/AdminProducts/AdminProducts";
 import AdminUpdate from "./pages/Admin/AdminUpdate/AdminUpdate";
 import AdminOrder from "./pages/Admin/AdminOrder/AdminOrder";
-// --- Auth Layout Imports ---
-import Auth from "./layouts/Auth/Auth";
-// === Auth's Page Imports ===
-import Login from "./pages/Auth/Login/Login";
-import Register from "./pages/Auth/Register/Register";
+// --- auth Layout Imports ---
+import Auth from "./layouts/auth/auth";
+// === auth's Page Imports ===
+import Login from "./pages/auth/Login/Login";
+import Register from "./pages/auth/Register/Register";
 // --- Components Imports ---
 import ScrollTop from "./components/ScrollTop/ScrollTop";
+import AIChatBox from "../public/components/AIChatBox/AIChatBox.jsx";
+
 // --- Implementation ---
 function App() {
   return (
@@ -63,12 +65,13 @@ function App() {
               <Route path="/admin/products/:id" element={<AdminUpdate />} />
             </Route>
           </Route>
-          {/* Auth Layout */}
+          {/* auth Layout */}
           <Route path="/auth" element={<Auth />}>
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
           </Route>
         </Routes>
+      <AIChatBox />
       </>
   );
 }

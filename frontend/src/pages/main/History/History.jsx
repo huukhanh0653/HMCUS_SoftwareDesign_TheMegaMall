@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import Pagination from "../../../components/Pagination/Pagination";
+import Breadcrumbs from "../../../../public/components/Breadcrumbs/Breadcrumbs";
+import Pagination from "../../../../public/components/Pagination/Pagination";
 
-import "./history.css";
+import "./History.css";
 
 const History = () => {
 

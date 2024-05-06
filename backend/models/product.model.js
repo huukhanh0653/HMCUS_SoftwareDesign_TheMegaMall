@@ -38,7 +38,6 @@ const productSchema = new Schema({
         required: [true, 'Product must have price']
     }
 })
-// The same create table in sql server and table have name which is lowercase."article" 
 const product = mongoose.model('products', productSchema);
 
 module.exports = product;

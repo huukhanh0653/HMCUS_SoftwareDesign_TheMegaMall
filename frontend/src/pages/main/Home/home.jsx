@@ -13,13 +13,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Components
-import CategorySlider from "../../../components/Home/CategorySlider/CategorySlider";
-import ProductSlider from "../../../components/Home/ProductSlider/ProductSlider";
-import ProductPanel from "../../../components/Home/ProductPanel/ProductPanel";
-import ProductShelf from "../../../components/ProductShelf/ProductShelf";
-import Pagination from "../../../components/Pagination/Pagination";
-import Loader from "../../../components/Loader/Loader";
-import Filter from "../../../components/Filter/Filter";
+import CategorySlider from "../../../../public/components/Home/CategorySlider/CategorySlider";
+import ProductSlider from "../../../../public/components/Home/ProductSlider/ProductSlider";
+import ProductPanel from "../../../../public/components/Home/ProductPanel/ProductPanel";
+import ProductShelf from "../../../../public/components/ProductShelf/ProductShelf";
+import Pagination from "../../../../public/components/Pagination/Pagination";
+import Loader from "../../../../public/components/Loader/Loader";
+import Filter from "../../../../public/components/Filter/Filter";
 
 // Style
 import "./home.css";

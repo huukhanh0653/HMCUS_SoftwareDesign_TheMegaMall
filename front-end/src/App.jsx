@@ -29,6 +29,7 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 // --- Components Imports ---
 import ScrollTop from "./components/ScrollTop/ScrollTop";
+import AIChatBox from "./components/Chatbox/AIChatBox.jsx";
 // --- Implementation ---
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
           <Route path="/auth/register" element={<Register />} />
         </Route>
       </Routes>
+      <AIChatBox/>
     </>
   );
 }

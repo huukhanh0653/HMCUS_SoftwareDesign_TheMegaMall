@@ -8,13 +8,13 @@ const Footer = ({ categoryList }) => {
   const today = new Date();
 
   return (
-    <footer>
+    <div className={'container-fluid'}>
       <div className="foot-content">
         <div className="foot-row">
           <div className="foot-left-section">
             <div className="foot-title">
               <div>
-                <FontAwesomeIcon icon={faCircleInfo} className="ico" /> The Mega
+                <FontAwesomeIcon icon={faCircleInfo} className="ico"/> The Mega
                 Mall
               </div>
             </div>
@@ -31,26 +31,29 @@ const Footer = ({ categoryList }) => {
           <div className="foot-right-section">
             <div className="foot-title">
               <div>
-                <FontAwesomeIcon icon={faTags} className="ico" /> Categories
+                <FontAwesomeIcon icon={faTags} className="ico"/> Categories
               </div>
             </div>
             <div className="foot-section-content" id="foot-categories">
               {categoryList.map((category, idx) => (
-                <Link to={`/categories/${category.name}`} key={idx}>
-                  {category.name}
-                </Link>
+                  <Link to={`/categories/${category.name}`} key={idx}>
+                    {category.name}
+                  </Link>
               ))}
             </div>
           </div>
         </div>
-      </div>
-      <div className="foot-banner">
-        <div>
-          <a>Privacy Policy | Terms & Conditions</a>
+        <div className="foot-banner">
+          <div>
+            <a>Privacy Policy | Terms & Conditions</a>
+          </div>
+          <div>Copyright © The Mega Mall @ {today.getFullYear()}</div>
         </div>
-        <div>Copyright © The Mega Mall @ {today.getFullYear()}</div>
+
       </div>
-    </footer>
+
+
+    </div>
   );
 };
 

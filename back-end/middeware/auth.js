@@ -62,6 +62,7 @@ exports.isLoggedAdmin = (req, res, next) => {
         }
 
         if (req.user.Role == 'admin') {
+            console.log(token)
             jwt.verify(token, process.env.KEY_TOKEN, async (err, data) => {
                 if (err) {
                     console.error('JWT Verification Failed:', err.message);

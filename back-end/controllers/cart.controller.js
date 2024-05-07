@@ -27,6 +27,8 @@ exports.addCart = async (req, res) => {
             product_id,
             quantity
         } = req.body;
+
+        console.log(req.body)
         
         const user = await getUser(req.params.id)
         await getProduct(product_id)

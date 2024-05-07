@@ -269,6 +269,7 @@ const ShopCart = () => {
             className="cart--order-checkout-info-inp"
             id="tel-num"
             placeholder="Please tell us your contact number"
+            defaultValue={userInfo?.PhoneNumber}
           />
           <div className="cart--order-checkout-inp-title">Address</div>
           <input
@@ -276,6 +277,7 @@ const ShopCart = () => {
             className="cart--order-checkout-info-inp"
             id="address"
             placeholder="Please tell us where to ship this order"
+            defaultValue={userInfo?.Address}
           />
           <div className="cart--order-checkout-btn-container">
             {loadCheckout ? (
